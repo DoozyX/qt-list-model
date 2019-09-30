@@ -7,6 +7,7 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/QQmlObjectListModel.h \
+    $$PWD/QQmlObjectListModelBase.h \
     $$PWD/QQmlVariantListModel.h \
     $$PWD/QtQmlTricksPlugin_SmartDataModels.h
 
