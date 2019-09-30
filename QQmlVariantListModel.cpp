@@ -1,10 +1,10 @@
 
 #include "QQmlVariantListModel.h"
 
-#define NO_PARENT QModelIndex ()
+#define NO_PARENT QModelIndex()
 #define BASE_ROLE Qt::UserRole
-#define EMPTY_STR QStringLiteral ("")
-#define EMPTY_BA  QByteArrayLiteral ("")
+#define EMPTY_STR QStringLiteral("")
+#define EMPTY_BA QByteArrayLiteral("")
 
 /*!
     \class QQmlVariantListModel
@@ -34,34 +34,29 @@
     \sa QQmlObjectListModel
 */
 
-
 /*!
     \details Constructs a new model that will hold QVariant as items.
 
     \param parent The parent object for the model memory management
 */
-QQmlVariantListModel::QQmlVariantListModel (QObject * parent) : QAbstractListModel (parent)
-  , m_count(0)
-  , m_items()
-  , m_roles()
-{
-    m_roles.insert (BASE_ROLE, QByteArrayLiteral ("qtVariant"));
+QQmlVariantListModel::QQmlVariantListModel(QObject* parent)
+    : QAbstractListModel(parent), m_count(0), m_items(), m_roles() {
+  m_roles.insert(BASE_ROLE, QByteArrayLiteral("qtVariant"));
 }
 
 /*!
     \internal
 */
-QQmlVariantListModel::~QQmlVariantListModel (void) {
-    clear ();
+QQmlVariantListModel::~QQmlVariantListModel(void) {
+  clear();
 }
 
 /*!
     \internal
 */
-int QQmlVariantListModel::rowCount (const QModelIndex & parent) const
-{
-    Q_UNUSED (parent);
-    return m_items.count ();
+int QQmlVariantListModel::rowCount(const QModelIndex& parent) const {
+  Q_UNUSED(parent);
+  return m_items.count();
 }
 
 /*!
@@ -75,14 +70,13 @@ int QQmlVariantListModel::rowCount (const QModelIndex & parent) const
 
     \b Note : the \c 0 role contains the QVariant itself.
 */
-QVariant QQmlVariantListModel::data (const QModelIndex & index, int role) const
-{
-    QVariant ret;
-    int idx = index.row ();
-    if (idx >= 0 && idx < count () && role == BASE_ROLE) {
-        ret = m_items.value (idx);
-    }
-    return ret;
+QVariant QQmlVariantListModel::data(const QModelIndex& index, int role) const {
+  QVariant ret;
+  int idx = index.row();
+  if (idx >= 0 && idx < count() && role == BASE_ROLE) {
+    ret = m_items.value(idx);
+  }
+  return ret;
 }
 
 /*!
@@ -94,9 +88,8 @@ QVariant QQmlVariantListModel::data (const QModelIndex & index, int role) const
 
     \b Note : the only role is \c 'qtVariant'.
 */
-QHash<int, QByteArray> QQmlVariantListModel::roleNames () const
-{
-    return m_roles;
+QHash<int, QByteArray> QQmlVariantListModel::roleNames() const {
+  return m_roles;
 }
 
 /*!
@@ -111,17 +104,16 @@ QHash<int, QByteArray> QQmlVariantListModel::roleNames () const
 
     \b Note : as the only role is \c 0 ('qtVariant'), it replaces the QVariant value
 */
-bool QQmlVariantListModel::setData (const QModelIndex & index, const QVariant & value, int role)
-{
-    bool ret = false;
-    int idx = index.row ();
-    if (idx >= 0 && idx < count () && role == BASE_ROLE) {
-        m_items.replace (idx, value);
-        QModelIndex item = QAbstractListModel::index (idx, 0, NO_PARENT);
-        emit dataChanged (item, item, QVector<int> (1, role));
-        ret = true;
-    }
-    return ret;
+bool QQmlVariantListModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+  bool ret = false;
+  int idx = index.row();
+  if (idx >= 0 && idx < count() && role == BASE_ROLE) {
+    m_items.replace(idx, value);
+    QModelIndex item = QAbstractListModel::index(idx, 0, NO_PARENT);
+    emit dataChanged(item, item, QVector<int>(1, role));
+    ret = true;
+  }
+  return ret;
 }
 
 /*!
@@ -129,9 +121,8 @@ bool QQmlVariantListModel::setData (const QModelIndex & index, const QVariant & 
 
     \return The count of items in the model
 */
-int QQmlVariantListModel::count () const
-{
-    return m_items.size ();
+int QQmlVariantListModel::count() const {
+  return m_items.size();
 }
 
 /*!
@@ -139,22 +130,20 @@ int QQmlVariantListModel::count () const
 
     \return Whether the model contains no item
 */
-bool QQmlVariantListModel::isEmpty () const
-{
-    return m_items.isEmpty ();
+bool QQmlVariantListModel::isEmpty() const {
+  return m_items.isEmpty();
 }
 
 /*!
     \details Delete all the items in the model.
 */
-void QQmlVariantListModel::clear ()
-{
-    if (!m_items.isEmpty ()) {
-        beginRemoveRows (NO_PARENT, 0, count () -1);
-        m_items.clear ();
-        endRemoveRows ();
-        updateCounter ();
-    }
+void QQmlVariantListModel::clear() {
+  if (!m_items.isEmpty()) {
+    beginRemoveRows(NO_PARENT, 0, count() - 1);
+    m_items.clear();
+    endRemoveRows();
+    updateCounter();
+  }
 }
 
 /*!
@@ -164,13 +153,12 @@ void QQmlVariantListModel::clear ()
 
     \sa prepend(QVariant), insert(int,QVariant)
 */
-void QQmlVariantListModel::append (const QVariant & item)
-{
-    int pos = m_items.count ();
-    beginInsertRows (NO_PARENT, pos, pos);
-    m_items.append (item);
-    endInsertRows ();
-    updateCounter ();
+void QQmlVariantListModel::append(const QVariant& item) {
+  int pos = m_items.count();
+  beginInsertRows(NO_PARENT, pos, pos);
+  m_items.append(item);
+  endInsertRows();
+  updateCounter();
 }
 
 /*!
@@ -180,12 +168,11 @@ void QQmlVariantListModel::append (const QVariant & item)
 
     \sa append(QVariant), insert(int,QVariant)
 */
-void QQmlVariantListModel::prepend (const QVariant & item)
-{
-    beginInsertRows (NO_PARENT, 0, 0);
-    m_items.prepend (item);
-    endInsertRows ();
-    updateCounter ();
+void QQmlVariantListModel::prepend(const QVariant& item) {
+  beginInsertRows(NO_PARENT, 0, 0);
+  m_items.prepend(item);
+  endInsertRows();
+  updateCounter();
 }
 
 /*!
@@ -196,12 +183,11 @@ void QQmlVariantListModel::prepend (const QVariant & item)
 
     \sa append(QVariant), prepend(QVariant)
 */
-void QQmlVariantListModel::insert (int idx, const QVariant & item)
-{
-    beginInsertRows (NO_PARENT, idx, idx);
-    m_items.insert (idx, item);
-    endInsertRows ();
-    updateCounter ();
+void QQmlVariantListModel::insert(int idx, const QVariant& item) {
+  beginInsertRows(NO_PARENT, idx, idx);
+  m_items.insert(idx, item);
+  endInsertRows();
+  updateCounter();
 }
 
 /*!
@@ -212,13 +198,12 @@ void QQmlVariantListModel::insert (int idx, const QVariant & item)
 
     \b Note : this is the regular way in C++ to modify the variant value.
 */
-void QQmlVariantListModel::replace (int pos, const QVariant & item)
-{
-    if (pos >= 0 && pos < count ()) {
-        m_items.replace (pos, item);
-        QModelIndex index = QAbstractListModel::index (pos, 0, NO_PARENT);
-        emit dataChanged (index, index, QVector<int> (1, BASE_ROLE));
-    }
+void QQmlVariantListModel::replace(int pos, const QVariant& item) {
+  if (pos >= 0 && pos < count()) {
+    m_items.replace(pos, item);
+    QModelIndex index = QAbstractListModel::index(pos, 0, NO_PARENT);
+    emit dataChanged(index, index, QVector<int>(1, BASE_ROLE));
+  }
 }
 
 /*!
@@ -228,15 +213,14 @@ void QQmlVariantListModel::replace (int pos, const QVariant & item)
 
     \sa prepend(QVariantList), insert(int, QVariantList)
 */
-void QQmlVariantListModel::appendList (const QVariantList & itemList)
-{
-    if (!itemList.isEmpty ()) {
-        int pos = m_items.count ();
-        beginInsertRows (NO_PARENT, pos, pos + itemList.count () -1);
-        m_items.append (itemList);
-        endInsertRows ();
-        updateCounter ();
-    }
+void QQmlVariantListModel::appendList(const QVariantList& itemList) {
+  if (!itemList.isEmpty()) {
+    int pos = m_items.count();
+    beginInsertRows(NO_PARENT, pos, pos + itemList.count() - 1);
+    m_items.append(itemList);
+    endInsertRows();
+    updateCounter();
+  }
 }
 
 /*!
@@ -246,17 +230,14 @@ void QQmlVariantListModel::appendList (const QVariantList & itemList)
 
     \sa append(QVariantList), insert(int, QVariantList)
 */
-void QQmlVariantListModel::prependList (const QVariantList & itemList)
-{
-    if (!itemList.isEmpty ()) {
-        beginInsertRows (NO_PARENT, 0, itemList.count () -1);
-        int offset = 0;
-        foreach (QVariant item, itemList) {
-            m_items.insert (offset, item);
-        }
-        endInsertRows ();
-        updateCounter ();
-    }
+void QQmlVariantListModel::prependList(const QVariantList& itemList) {
+  if (!itemList.isEmpty()) {
+    beginInsertRows(NO_PARENT, 0, itemList.count() - 1);
+    int offset = 0;
+    foreach (QVariant item, itemList) { m_items.insert(offset, item); }
+    endInsertRows();
+    updateCounter();
+  }
 }
 
 /*!
@@ -267,18 +248,17 @@ void QQmlVariantListModel::prependList (const QVariantList & itemList)
 
     \sa append(QVariantList), prepend(QVariantList)
 */
-void QQmlVariantListModel::insertList (int idx, const QVariantList & itemList)
-{
-    if (!itemList.isEmpty ()) {
-        beginInsertRows (NO_PARENT, idx, idx + itemList.count () -1);
-        int offset = 0;
-        foreach (QVariant item, itemList) {
-            m_items.insert (idx + offset, item);
-            offset++;
-        }
-        endInsertRows ();
-        updateCounter ();
+void QQmlVariantListModel::insertList(int idx, const QVariantList& itemList) {
+  if (!itemList.isEmpty()) {
+    beginInsertRows(NO_PARENT, idx, idx + itemList.count() - 1);
+    int offset = 0;
+    foreach (QVariant item, itemList) {
+      m_items.insert(idx + offset, item);
+      offset++;
     }
+    endInsertRows();
+    updateCounter();
+  }
 }
 
 /*!
@@ -287,18 +267,17 @@ void QQmlVariantListModel::insertList (int idx, const QVariantList & itemList)
     \param idx The current position of the item
     \param pos The position where it willl be after the move
 */
-void QQmlVariantListModel::move (int idx, int pos)
-{
-    if (idx != pos) {
-        // FIXME : use begin/end MoveRows when supported by Repeater, since then use remove/insert pair
-        //beginMoveRows (NO_PARENT, idx, idx, NO_PARENT, (idx < pos ? pos +1 : pos));
-        beginRemoveRows (NO_PARENT, idx, idx);
-        beginInsertRows (NO_PARENT, pos, pos);
-        m_items.move (idx, pos);
-        endRemoveRows ();
-        endInsertRows ();
-        //endMoveRows ();
-    }
+void QQmlVariantListModel::move(int idx, int pos) {
+  if (idx != pos) {
+    // FIXME : use begin/end MoveRows when supported by Repeater, since then use remove/insert pair
+    // beginMoveRows (NO_PARENT, idx, idx, NO_PARENT, (idx < pos ? pos +1 : pos));
+    beginRemoveRows(NO_PARENT, idx, idx);
+    beginInsertRows(NO_PARENT, pos, pos);
+    m_items.move(idx, pos);
+    endRemoveRows();
+    endInsertRows();
+    // endMoveRows ();
+  }
 }
 
 /*!
@@ -306,14 +285,13 @@ void QQmlVariantListModel::move (int idx, int pos)
 
     \param idx The position of the item in the model
 */
-void QQmlVariantListModel::remove (int idx)
-{
-    if (idx >= 0 && idx < m_items.size ()) {
-        beginRemoveRows (NO_PARENT, idx, idx);
-        m_items.removeAt (idx);
-        endRemoveRows ();
-        updateCounter ();
-    }
+void QQmlVariantListModel::remove(int idx) {
+  if (idx >= 0 && idx < m_items.size()) {
+    beginRemoveRows(NO_PARENT, idx, idx);
+    m_items.removeAt(idx);
+    endRemoveRows();
+    updateCounter();
+  }
 }
 
 /*!
@@ -322,13 +300,12 @@ void QQmlVariantListModel::remove (int idx)
     \param idx The position of the item in the model
     \return A variant containing the item
 */
-QVariant QQmlVariantListModel::get (int idx) const
-{
-    QVariant ret;
-    if (idx >= 0 && idx < m_items.size ()) {
-        ret = m_items.value (idx);
-    }
-    return ret;
+QVariant QQmlVariantListModel::get(int idx) const {
+  QVariant ret;
+  if (idx >= 0 && idx < m_items.size()) {
+    ret = m_items.value(idx);
+  }
+  return ret;
 }
 
 /*!
@@ -336,18 +313,16 @@ QVariant QQmlVariantListModel::get (int idx) const
 
     \return A \c QVariantList containing all the variants
 */
-QVariantList QQmlVariantListModel::list () const
-{
-    return m_items;
+QVariantList QQmlVariantListModel::list() const {
+  return m_items;
 }
 
 /*!
     \internal
 */
-void QQmlVariantListModel::updateCounter ()
-{
-    if (m_count != m_items.count ()) {
-        m_count = m_items.count ();
-        emit countChanged (m_count);
-    }
+void QQmlVariantListModel::updateCounter() {
+  if (m_count != m_items.count()) {
+    m_count = m_items.count();
+    emit countChanged(m_count);
+  }
 }
