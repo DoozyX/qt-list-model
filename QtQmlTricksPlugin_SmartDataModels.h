@@ -1,5 +1,4 @@
-#ifndef QTQMLTRICKSPLUGIN_SMARTDATAMODELS_H
-#define QTQMLTRICKSPLUGIN_SMARTDATAMODELS_H
+#pragma once
 
 #include <QQmlEngine>
 #include <QtQml>
@@ -18,5 +17,3 @@ static void registerQtQmlTricksSmartDataModel(QQmlEngine* engine) {
   qmlRegisterUncreatableType<QQmlObjectListModelBase>(uri, maj, min, "ObjectListModel", msg);
   qmlRegisterUncreatableType<QQmlVariantListModel>(uri, maj, min, "VariantListModel", msg);
 }
-
-#endif  // QTQMLTRICKSPLUGIN_SMARTDATAMODELS_H

@@ -1,4 +1,3 @@
-
 #include "QQmlObjectListModel.h"
 
 /*!

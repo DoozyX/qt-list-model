@@ -1,5 +1,4 @@
-#ifndef QQMLVARIANTLISTMODEL_H
-#define QQMLVARIANTLISTMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QList>
@@ -47,5 +46,3 @@ class QQmlVariantListModel : public QAbstractListModel {
   QVariantList m_items;
   QHash<int, QByteArray> m_roles;
 };
-
-#endif  // QQMLVARIANTLISTMODEL_H

@@ -1,4 +1,3 @@
-
 #include "QQmlVariantListModel.h"
 
 #define NO_PARENT QModelIndex()

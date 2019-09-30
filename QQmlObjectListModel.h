@@ -1,5 +1,4 @@
-#ifndef QQMLOBJECTLISTMODEL_H
-#define QQMLOBJECTLISTMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QByteArray>
@@ -390,5 +389,3 @@ class QQmlObjectListModel : public QQmlObjectListModelBase {
   QQmlObjectListModel<type>* get_##name(void) const { return m_##name; } \
                                                                          \
  private:
-
-#endif  // QQMLOBJECTLISTMODEL_H
