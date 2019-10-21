@@ -17,28 +17,6 @@
 
 #include "./ObjectListModelBase.h"
 
-template <typename T>
-QList<T> qListFromVariant(const QVariantList& list) {
-  QList<T> ret;
-  ret.reserve(list.size());
-  for (QVariantList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
-    const QVariant& var = static_cast<QVariant>(*it);
-    ret.append(var.value<T>());
-  }
-  return ret;
-}
-
-template <typename T>
-QVariantList qListToVariant(const QList<T>& list) {
-  QVariantList ret;
-  ret.reserve(list.size());
-  for (typename QList<T>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it) {
-    const T& val = static_cast<T>(*it);
-    ret.append(QVariant::fromValue(val));
-  }
-  return ret;
-}
-
 template <class ItemType>
 class QQmlObjectListModel : public ObjectListModelBase {
  public:
@@ -241,7 +219,6 @@ class QQmlObjectListModel : public ObjectListModelBase {
   QObject* get(const QString& uid) const Q_DECL_FINAL { return static_cast<QObject*>(getByUid(uid)); }
   QObject* getFirst(void) const Q_DECL_FINAL { return static_cast<QObject*>(first()); }
   QObject* getLast(void) const Q_DECL_FINAL { return static_cast<QObject*>(last()); }
-  QVariantList toVarArray(void) const Q_DECL_FINAL { return qListToVariant<ItemType*>(m_items); }
 
  protected:  // internal stuff
   static const QString& emptyStr(void) {
