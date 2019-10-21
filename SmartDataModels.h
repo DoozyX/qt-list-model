@@ -14,6 +14,6 @@ static void registerSmartDataModel(QQmlEngine* engine) {
   const int min = 0;
   const char* msg = "!!!";
 
-  qmlRegisterUncreatableType<QQmlObjectListModelBase>(uri, maj, min, "ObjectListModel", msg);
+  qmlRegisterUncreatableType<ObjectListModelBase>(uri, maj, min, "ObjectListModel", msg);
   qmlRegisterUncreatableType<VariantListModel>(uri, maj, min, "VariantListModel", msg);
 }

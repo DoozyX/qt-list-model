@@ -73,7 +73,7 @@ class ObjectListModel : public ObjectListModelBase {
     return ret;
   }
   QHash<int, QByteArray> roleNames(void) const Q_DECL_FINAL { return m_roles; }
-  typedef typename QList<ItemType*>::const_iterator const_iterator;
+  using const_iterator = typename QList<ItemType*>::const_iterator;
   const_iterator begin(void) const { return m_items.begin(); }
   const_iterator end(void) const { return m_items.end(); }
   const_iterator constBegin(void) const { return m_items.constBegin(); }
