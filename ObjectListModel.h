@@ -18,11 +18,11 @@
 #include "./ObjectListModelBase.h"
 
 template <class ItemType>
-class QQmlObjectListModel : public ObjectListModelBase {
+class ObjectListModel : public ObjectListModelBase {
  public:
-  explicit QQmlObjectListModel(QObject* parent = Q_NULLPTR,
-                               const QByteArray& displayRole = QByteArray(),
-                               const QByteArray& uidRole = QByteArray())
+  explicit ObjectListModel(QObject* parent = Q_NULLPTR,
+                           const QByteArray& displayRole = QByteArray(),
+                           const QByteArray& uidRole = QByteArray())
       : ObjectListModelBase(parent),
         m_count(0),
         m_uidRoleName(uidRole),
