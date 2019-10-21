@@ -5,13 +5,13 @@
 #include <QObject>
 #include <QVariant>
 
-class QQmlVariantListModel : public QAbstractListModel {
+class VariantListModel : public QAbstractListModel {
   Q_OBJECT
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 
  public:
-  explicit QQmlVariantListModel(QObject* parent = Q_NULLPTR);
-  ~QQmlVariantListModel(void);
+  explicit VariantListModel(QObject* parent = Q_NULLPTR);
+  ~VariantListModel(void);
 
  public:  // QAbstractItemModel interface reimplemented
   int rowCount(const QModelIndex& parent = QModelIndex()) const;

@@ -3,10 +3,10 @@
 #include <QQmlEngine>
 #include <QtQml>
 
-#include "QQmlObjectListModel.h"
-#include "QQmlVariantListModel.h"
+#include "ObjectListModel.h"
+#include "VariantListModel.h"
 
-static void registerQtQmlTricksSmartDataModel(QQmlEngine* engine) {
+static void registerSmartDataModel(QQmlEngine* engine) {
   Q_UNUSED(engine)
 
   const char* uri = "QtQmlTricks.SmartDataModels";  // @uri QtQmlTricks.SmartDataModels
@@ -15,5 +15,5 @@ static void registerQtQmlTricksSmartDataModel(QQmlEngine* engine) {
   const char* msg = "!!!";
 
   qmlRegisterUncreatableType<QQmlObjectListModelBase>(uri, maj, min, "ObjectListModel", msg);
-  qmlRegisterUncreatableType<QQmlVariantListModel>(uri, maj, min, "VariantListModel", msg);
+  qmlRegisterUncreatableType<VariantListModel>(uri, maj, min, "VariantListModel", msg);
 }

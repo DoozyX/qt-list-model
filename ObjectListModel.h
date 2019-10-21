@@ -15,7 +15,7 @@
 #include <QVariant>
 #include <QVector>
 
-#include "./QQmlObjectListModelBase.h"
+#include "./ObjectListModelBase.h"
 
 template <typename T>
 QList<T> qListFromVariant(const QVariantList& list) {
@@ -45,12 +45,12 @@ QVariantList qListToVariant(const QList<T>& list) {
     if (_type_* _var_ = (*it))
 
 template <class ItemType>
-class QQmlObjectListModel : public QQmlObjectListModelBase {
+class QQmlObjectListModel : public ObjectListModelBase {
  public:
   explicit QQmlObjectListModel(QObject* parent = Q_NULLPTR,
                                const QByteArray& displayRole = QByteArray(),
                                const QByteArray& uidRole = QByteArray())
-      : QQmlObjectListModelBase(parent),
+      : ObjectListModelBase(parent),
         m_count(0),
         m_uidRoleName(uidRole),
         m_dispRoleName(displayRole),

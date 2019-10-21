@@ -2,12 +2,12 @@
 
 #include <QAbstractListModel>
 
-class QQmlObjectListModelBase : public QAbstractListModel {  // abstract Qt base class
+class ObjectListModelBase : public QAbstractListModel {  // abstract Qt base class
   Q_OBJECT
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 
  public:
-  explicit QQmlObjectListModelBase(QObject* parent = Q_NULLPTR) : QAbstractListModel(parent) {}
+  explicit ObjectListModelBase(QObject* parent = Q_NULLPTR) : QAbstractListModel(parent) {}
 
  public slots:  // virtual methods API for QML
   virtual int size(void) const = 0;

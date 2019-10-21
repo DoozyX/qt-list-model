@@ -6,12 +6,11 @@ QT += core qml
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/QQmlObjectListModel.h \
-    $$PWD/QQmlObjectListModelBase.h \
-    $$PWD/QQmlVariantListModel.h \
-    $$PWD/QtQmlTricksPlugin_SmartDataModels.h
+    $$PWD/ObjectListModel.h \
+    $$PWD/ObjectListModelBase.h \
+    $$PWD/SmartDataModels.h \
+    $$PWD/VariantListModel.h
 
 SOURCES += \
-    $$PWD/QQmlObjectListModel.cpp \
-    $$PWD/QQmlVariantListModel.cpp
+    $$PWD/VariantListModel.cpp
 
