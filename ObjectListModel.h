@@ -39,11 +39,6 @@ QVariantList qListToVariant(const QList<T>& list) {
   return ret;
 }
 
-// custom foreach for QList, which uses no copy and check pointer non-null
-#define FOREACH_PTR_IN_QLIST(_type_, _var_, _list_)                                                     \
-  for (typename QList<_type_*>::const_iterator it = _list_.constBegin(); it != _list_.constEnd(); ++it) \
-    if (_type_* _var_ = (*it))
-
 template <class ItemType>
 class QQmlObjectListModel : public ObjectListModelBase {
  public:
@@ -126,7 +121,9 @@ class QQmlObjectListModel : public ObjectListModelBase {
   void clear(void) Q_DECL_FINAL {
     if (!m_items.isEmpty()) {
       beginRemoveRows(noParent(), 0, m_items.count() - 1);
-      FOREACH_PTR_IN_QLIST(ItemType, item, m_items) { dereferenceItem(item); }
+      for (auto item : m_items) {
+        dereferenceItem(item);
+      }
       m_items.clear();
       updateCounter();
       endRemoveRows();
@@ -166,7 +163,9 @@ class QQmlObjectListModel : public ObjectListModelBase {
       beginInsertRows(noParent(), pos, pos + itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
       m_items.append(itemList);
-      FOREACH_PTR_IN_QLIST(ItemType, item, itemList) { referenceItem(item); }
+      for (auto item : itemList) {
+        referenceItem(item);
+      }
       updateCounter();
       endInsertRows();
     }
@@ -176,7 +175,7 @@ class QQmlObjectListModel : public ObjectListModelBase {
       beginInsertRows(noParent(), 0, itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
       int offset = 0;
-      FOREACH_PTR_IN_QLIST(ItemType, item, itemList) {
+      for (auto item : itemList) {
         m_items.insert(offset, item);
         referenceItem(item);
         offset++;
@@ -190,7 +189,7 @@ class QQmlObjectListModel : public ObjectListModelBase {
       beginInsertRows(noParent(), idx, idx + itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
       int offset = 0;
-      FOREACH_PTR_IN_QLIST(ItemType, item, itemList) {
+      for (auto item : itemList) {
         m_items.insert(idx + offset, item);
         referenceItem(item);
         offset++;
