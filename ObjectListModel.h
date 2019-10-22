@@ -39,10 +39,10 @@ class ObjectListModel : public ObjectListModelBase {
       m_roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
     }
     m_roles.insert(baseRole(), QByteArrayLiteral("qtObject"));
-    const int len = m_metaObj.propertyCount();
-    for (int propertyIdx = 0, role = (baseRole() + 1); propertyIdx < len; propertyIdx++, role++) {
-      QMetaProperty metaProp = m_metaObj.property(propertyIdx);
-      const QByteArray propName = QByteArray(metaProp.name());
+    const auto len = m_metaObj.propertyCount();
+    for (auto propertyIdx = 0, role = (baseRole() + 1); propertyIdx < len; propertyIdx++, role++) {
+      auto metaProp = m_metaObj.property(propertyIdx);
+      const auto propName = QByteArray(metaProp.name());
       if (!roleNamesBlacklist.contains(propName)) {
         m_roles.insert(role, propName);
         if (metaProp.hasNotifySignal()) {
@@ -56,8 +56,8 @@ class ObjectListModel : public ObjectListModelBase {
   }
   bool setData(const QModelIndex& index, const QVariant& value, int role) Q_DECL_FINAL {
     bool ret = false;
-    ItemType* item = at(index.row());
-    const QByteArray rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
+    auto item = at(index.row());
+    const auto rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
     if (item != Q_NULLPTR && role != baseRole() && !rolename.isEmpty()) {
       ret = item->setProperty(rolename, value);
     }
@@ -65,8 +65,8 @@ class ObjectListModel : public ObjectListModelBase {
   }
   QVariant data(const QModelIndex& index, int role) const Q_DECL_FINAL {
     QVariant ret;
-    ItemType* item = at(index.row());
-    const QByteArray rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
+    auto item = at(index.row());
+    const auto rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
     if (item != Q_NULLPTR && !rolename.isEmpty()) {
       ret.setValue(role != baseRole() ? item->property(rolename) : QVariant::fromValue(static_cast<QObject*>(item)));
     }
@@ -137,7 +137,7 @@ class ObjectListModel : public ObjectListModelBase {
   }
   void append(const QList<ItemType*>& itemList) {
     if (!itemList.isEmpty()) {
-      const int pos = m_items.count();
+      const auto pos = m_items.count();
       beginInsertRows(noParent(), pos, pos + itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
       m_items.append(itemList);
@@ -152,7 +152,7 @@ class ObjectListModel : public ObjectListModelBase {
     if (!itemList.isEmpty()) {
       beginInsertRows(noParent(), 0, itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
-      int offset = 0;
+      auto offset = 0;
       for (auto item : itemList) {
         m_items.insert(offset, item);
         referenceItem(item);
@@ -166,7 +166,7 @@ class ObjectListModel : public ObjectListModelBase {
     if (!itemList.isEmpty()) {
       beginInsertRows(noParent(), idx, idx + itemList.count() - 1);
       m_items.reserve(m_items.count() + itemList.count());
-      int offset = 0;
+      auto offset = 0;
       for (auto item : itemList) {
         m_items.insert(idx + offset, item);
         referenceItem(item);
@@ -190,14 +190,14 @@ class ObjectListModel : public ObjectListModelBase {
   }
   void remove(ItemType* item) {
     if (item != Q_NULLPTR) {
-      const int idx = m_items.indexOf(item);
+      const auto idx = m_items.indexOf(item);
       remove(idx);
     }
   }
   void remove(int idx) Q_DECL_FINAL {
     if (idx >= 0 && idx < m_items.size()) {
       beginRemoveRows(noParent(), idx, idx);
-      ItemType* item = m_items.takeAt(idx);
+      auto item = m_items.takeAt(idx);
       dereferenceItem(item);
       updateCounter();
       endRemoveRows();
@@ -222,15 +222,15 @@ class ObjectListModel : public ObjectListModelBase {
 
  protected:  // internal stuff
   static const QString& emptyStr(void) {
-    static const QString ret = QStringLiteral("");
+    static const auto ret = QStringLiteral("");
     return ret;
   }
   static const QByteArray& emptyBA(void) {
-    static const QByteArray ret = QByteArrayLiteral("");
+    static const auto ret = QByteArrayLiteral("");
     return ret;
   }
   static const QModelIndex& noParent(void) {
-    static const QModelIndex ret = QModelIndex();
+    static const auto ret = QModelIndex();
     return ret;
   }
   static const int& baseRole(void) {
@@ -266,7 +266,7 @@ class ObjectListModel : public ObjectListModelBase {
       disconnect(this, Q_NULLPTR, item, Q_NULLPTR);
       disconnect(item, Q_NULLPTR, this, Q_NULLPTR);
       if (!m_uidRoleName.isEmpty()) {
-        const QString key = m_indexByUid.key(item, emptyStr());
+        const auto key = m_indexByUid.key(item, emptyStr());
         if (!key.isEmpty()) {
           m_indexByUid.remove(key);
         }
@@ -277,12 +277,12 @@ class ObjectListModel : public ObjectListModelBase {
     }
   }
   void onItemPropertyChanged(void) Q_DECL_FINAL {
-    ItemType* item = qobject_cast<ItemType*>(sender());
-    const int row = m_items.indexOf(item);
-    const int sig = senderSignalIndex();
-    const int role = m_signalIdxToRole.value(sig, -1);
+    auto item = qobject_cast<ItemType*>(sender());
+    const auto row = m_items.indexOf(item);
+    const auto sig = senderSignalIndex();
+    const auto role = m_signalIdxToRole.value(sig, -1);
     if (row >= 0 && role >= 0) {
-      const QModelIndex index = QAbstractListModel::index(row, 0, noParent());
+      const auto index = QAbstractListModel::index(row, 0, noParent());
       QVector<int> rolesList;
       rolesList.append(role);
       if (m_roles.value(role) == m_dispRoleName) {
@@ -291,13 +291,13 @@ class ObjectListModel : public ObjectListModelBase {
       emit dataChanged(index, index, rolesList);
     }
     if (!m_uidRoleName.isEmpty()) {
-      const QByteArray roleName = m_roles.value(role, emptyBA());
+      const auto roleName = m_roles.value(role, emptyBA());
       if (!roleName.isEmpty() && roleName == m_uidRoleName) {
-        const QString key = m_indexByUid.key(item, emptyStr());
+        const auto key = m_indexByUid.key(item, emptyStr());
         if (!key.isEmpty()) {
           m_indexByUid.remove(key);
         }
-        const QString value = item->property(m_uidRoleName).toString();
+        const auto value = item->property(m_uidRoleName).toString();
         if (!value.isEmpty()) {
           m_indexByUid.insert(value, item);
         }
