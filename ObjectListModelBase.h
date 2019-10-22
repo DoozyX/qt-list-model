@@ -7,7 +7,7 @@ class ObjectListModelBase : public QAbstractListModel {  // abstract Qt base cla
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 
  public:
-  explicit ObjectListModelBase(QObject* parent = Q_NULLPTR) : QAbstractListModel(parent) {}
+  explicit ObjectListModelBase() : QAbstractListModel(nullptr) {}
 
  public slots:  // virtual methods API for QML
   virtual int size(void) const = 0;

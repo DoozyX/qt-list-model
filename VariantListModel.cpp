@@ -38,7 +38,7 @@
 
     \param parent The parent object for the model memory management
 */
-VariantListModel::VariantListModel(QObject* parent) : QAbstractListModel(parent), m_count(0), m_items(), m_roles() {
+VariantListModel::VariantListModel() : QAbstractListModel(nullptr), m_count(0), m_items(), m_roles() {
   m_roles.insert(BASE_ROLE, QByteArrayLiteral("qtVariant"));
 }
 

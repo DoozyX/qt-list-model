@@ -10,7 +10,7 @@ class VariantListModel : public QAbstractListModel {
   Q_PROPERTY(int count READ count NOTIFY countChanged)
 
  public:
-  explicit VariantListModel(QObject* parent = Q_NULLPTR);
+  explicit VariantListModel();
   ~VariantListModel(void);
 
  public:  // QAbstractItemModel interface reimplemented

@@ -20,10 +20,8 @@
 template <class ItemType>
 class ObjectListModel : public ObjectListModelBase {
  public:
-  explicit ObjectListModel(QObject* parent = Q_NULLPTR,
-                           const QByteArray& displayRole = QByteArray(),
-                           const QByteArray& uidRole = QByteArray())
-      : ObjectListModelBase(parent),
+  explicit ObjectListModel(const QByteArray& displayRole = QByteArray(), const QByteArray& uidRole = QByteArray())
+      : ObjectListModelBase(),
         m_count(0),
         m_uidRoleName(uidRole),
         m_dispRoleName(displayRole),
