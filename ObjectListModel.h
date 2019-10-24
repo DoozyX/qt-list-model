@@ -20,7 +20,7 @@
 template <class ItemType>
 class ObjectListModel : public ObjectListModelBase {
  public:
-  explicit ObjectListModel(const QByteArray& displayRole = QByteArray(), const QByteArray& uidRole = QByteArray())
+  explicit ObjectListModel(const QByteArray& uidRole = QByteArray(), const QByteArray& displayRole = QByteArray())
       : ObjectListModelBase(),
         m_count(0),
         m_uidRoleName(uidRole),
