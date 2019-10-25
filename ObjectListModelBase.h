@@ -23,8 +23,8 @@ class ObjectListModelBase : public QAbstractListModel {  // abstract Qt base cla
   virtual void move(int idx, int pos) = 0;
   virtual void remove(QObject* item) = 0;
   virtual void remove(int idx) = 0;
-  virtual QObject* get(int idx) const = 0;
-  virtual QObject* get(const QString& uid) const = 0;
+  virtual QObject* getAt(int idx) const = 0;
+  virtual QObject* getByID(const QString& uid) const = 0;
   virtual QObject* getFirst(void) const = 0;
   virtual QObject* getLast(void) const = 0;
 

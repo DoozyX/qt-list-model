@@ -212,9 +212,9 @@ class ObjectListModel : public ObjectListModelBase {
   void remove(QObject* item) override { remove(qobject_cast<ItemType*>(item)); }
   bool contains(QObject* item) const override { return contains(qobject_cast<ItemType*>(item)); }
   int indexOf(QObject* item) const override { return indexOf(qobject_cast<ItemType*>(item)); }
-  int indexOf(const QString& uid) const { return indexOf(get(uid)); }
-  QObject* get(int idx) const override { return static_cast<QObject*>(at(idx)); }
-  QObject* get(const QString& uid) const override { return static_cast<QObject*>(getByUid(uid)); }
+  int indexOf(const QString& uid) const { return indexOf(getByID(uid)); }
+  QObject* getAt(int idx) const override { return static_cast<QObject*>(at(idx)); }
+  QObject* getByID(const QString& uid) const override { return static_cast<QObject*>(getByUid(uid)); }
   QObject* getFirst(void) const override { return static_cast<QObject*>(first()); }
   QObject* getLast(void) const override { return static_cast<QObject*>(last()); }
 
