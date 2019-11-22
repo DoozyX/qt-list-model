@@ -321,13 +321,13 @@ class ObjectListModel : public ObjectListModelBase {
   QHash<QString, ItemType*> m_indexByUid;
 };
 
-#define QML_OBJMODEL_PROPERTY(type, name)                                \
- protected:                                                              \
-  Q_PROPERTY(QQmlObjectListModelBase* name READ get_##name CONSTANT)     \
- private:                                                                \
-  QQmlObjectListModel<type>* m_##name;                                   \
-                                                                         \
- public:                                                                 \
-  QQmlObjectListModel<type>* get_##name(void) const { return m_##name; } \
-                                                                         \
+#define UNIQUE_OBJMODEL_PROPERTY(type, name)                               \
+ protected:                                                                \
+  Q_PROPERTY(ObjectListModelBase* name READ get_##name CONSTANT)           \
+ private:                                                                  \
+  std::unique_ptr<ObjectListModel<type>> m_##name;                         \
+                                                                           \
+ public:                                                                   \
+  ObjectListModel<type>* get_##name(void) const { return m_##name.get(); } \
+                                                                           \
  private:
