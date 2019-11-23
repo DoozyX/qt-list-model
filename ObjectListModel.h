@@ -14,6 +14,7 @@
 #include <QStringBuilder>
 #include <QVariant>
 #include <QVector>
+#include <memory>
 
 #include "./ObjectListModelBase.h"
 
@@ -330,4 +331,15 @@ class ObjectListModel : public ObjectListModelBase {
  public:                                                                   \
   ObjectListModel<type>* get_##name(void) const { return m_##name.get(); } \
                                                                            \
+ private:
+
+#define UNIQUE_OBJMODEL_PROPERTY_INIT(type, name, idRole)                                            \
+ protected:                                                                                          \
+  Q_PROPERTY(ObjectListModelBase* name READ get_##name CONSTANT)                                     \
+ private:                                                                                            \
+  std::unique_ptr<ObjectListModel<type>> m_##name = std::make_unique<ObjectListModel<type>>(idRole); \
+                                                                                                     \
+ public:                                                                                             \
+  ObjectListModel<type>* get_##name(void) const { return m_##name.get(); }                           \
+                                                                                                     \
  private:
