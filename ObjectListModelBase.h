@@ -9,7 +9,7 @@ class ObjectListModelBase : public QAbstractListModel {  // abstract Qt base cla
  public:
   explicit ObjectListModelBase() : QAbstractListModel(nullptr) {}
 
- public slots:  // virtual methods API for QML
+ public Q_SLOTS:  // virtual methods API for QML
   virtual int size(void) const = 0;
   virtual int count(void) const = 0;
   virtual bool isEmpty(void) const = 0;
@@ -28,9 +28,9 @@ class ObjectListModelBase : public QAbstractListModel {  // abstract Qt base cla
   virtual QObject* getFirst(void) const = 0;
   virtual QObject* getLast(void) const = 0;
 
- protected slots:  // internal callback
+ protected Q_SLOTS:  // internal callback
   virtual void onItemPropertyChanged(void) = 0;
 
- signals:  // notifier
+ Q_SIGNALS:  // notifier
   void countChanged(void);
 };

@@ -287,7 +287,7 @@ class ObjectListModel : public ObjectListModelBase {
       if (m_roles.value(role) == m_dispRoleName) {
         rolesList.append(Qt::DisplayRole);
       }
-      emit dataChanged(index, index, rolesList);
+      Q_EMIT dataChanged(index, index, rolesList);
     }
     if (!m_uidRoleName.isEmpty()) {
       const auto roleName = m_roles.value(role, emptyBA());
@@ -306,7 +306,7 @@ class ObjectListModel : public ObjectListModelBase {
   inline void updateCounter(void) {
     if (m_count != m_items.count()) {
       m_count = m_items.count();
-      emit countChanged();
+      Q_EMIT countChanged();
     }
   }
 
