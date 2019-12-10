@@ -45,7 +45,7 @@ VariantListModel::VariantListModel() : QAbstractListModel(nullptr), m_count(0), 
 /*!
     \internal
 */
-VariantListModel::~VariantListModel(void) {
+VariantListModel::~VariantListModel() {
   clear();
 }
 

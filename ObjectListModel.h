@@ -24,7 +24,6 @@ class ObjectListModel : public ObjectListModelBase {
  public:
   explicit ObjectListModel(QByteArray uidRole = QByteArray(), QByteArray displayRole = QByteArray())
       : ObjectListModelBase(),
-        m_count(0),
         m_uidRoleName(std::move(uidRole)),
         m_dispRoleName(std::move(displayRole)),
         m_metaObj(ItemType::staticMetaObject) {
@@ -57,43 +56,43 @@ class ObjectListModel : public ObjectListModelBase {
   bool setData(const QModelIndex& index, const QVariant& value, int role) override {
     bool ret = false;
     auto item = at(index.row());
-    const auto rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
-    if (item != Q_NULLPTR && role != baseRole() && !rolename.isEmpty()) {
-      ret = item->setProperty(rolename, value);
+    const auto roleName = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
+    if (item != Q_NULLPTR && role != baseRole() && !roleName.isEmpty()) {
+      ret = item->setProperty(roleName, value);
     }
     return ret;
   }
-  QVariant data(const QModelIndex& index, int role) const override {
+  [[nodiscard]] QVariant data(const QModelIndex& index, int role) const override {
     QVariant ret;
     auto item = at(index.row());
-    const auto rolename = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
-    if (item != Q_NULLPTR && !rolename.isEmpty()) {
-      ret.setValue(role != baseRole() ? item->property(rolename) : QVariant::fromValue(static_cast<QObject*>(item)));
+    const auto roleName = (role != Qt::DisplayRole ? m_roles.value(role, emptyBA()) : m_dispRoleName);
+    if (item != Q_NULLPTR && !roleName.isEmpty()) {
+      ret.setValue(role != baseRole() ? item->property(roleName) : QVariant::fromValue(static_cast<QObject*>(item)));
     }
     return ret;
   }
-  QHash<int, QByteArray> roleNames() const override { return m_roles; }
+  [[nodiscard]] QHash<int, QByteArray> roleNames() const override { return m_roles; }
   using const_iterator = typename QList<ItemType*>::const_iterator;
-  const_iterator begin() const { return m_items.begin(); }
-  const_iterator end() const { return m_items.end(); }
-  const_iterator constBegin() const { return m_items.constBegin(); }
-  const_iterator constEnd() const { return m_items.constEnd(); }
+  [[nodiscard]] const_iterator begin() const { return m_items.begin(); }
+  [[nodiscard]] const_iterator end() const { return m_items.end(); }
+  [[nodiscard]] const_iterator constBegin() const { return m_items.constBegin(); }
+  [[nodiscard]] const_iterator constEnd() const { return m_items.constEnd(); }
 
  public:  // C++ API
-  ItemType* at(int idx) const {
+  [[nodiscard]] ItemType* at(int idx) const {
     ItemType* ret = Q_NULLPTR;
     if (idx >= 0 && idx < m_items.size()) {
       ret = m_items.value(idx);
     }
     return ret;
   }
-  ItemType* getByUid(const QString& uid) const {
+  [[nodiscard]] ItemType* getByUid(const QString& uid) const {
     return (!m_indexByUid.isEmpty() ? m_indexByUid.value(uid, Q_NULLPTR) : Q_NULLPTR);
   }
-  int roleForName(const QByteArray& name) const override { return m_roles.key(name, -1); }
-  int count() const override { return m_count; }
-  int size() const override { return m_count; }
-  bool isEmpty() const override { return m_items.isEmpty(); }
+  [[nodiscard]] int roleForName(const QByteArray& name) const override { return m_roles.key(name, -1); }
+  [[nodiscard]] int count() const override { return m_count; }
+  [[nodiscard]] int size() const override { return m_count; }
+  [[nodiscard]] bool isEmpty() const override { return m_items.isEmpty(); }
   bool contains(ItemType* item) const { return m_items.contains(item); }
   int indexOf(ItemType* item) const { return m_items.indexOf(item); }
   void clear() override {
@@ -203,22 +202,22 @@ class ObjectListModel : public ObjectListModelBase {
       endRemoveRows();
     }
   }
-  ItemType* first() const { return m_items.first(); }
-  ItemType* last() const { return m_items.last(); }
-  const QList<ItemType*>& toList() const { return m_items; }
+  [[nodiscard]] ItemType* first() const { return m_items.first(); }
+  [[nodiscard]] ItemType* last() const { return m_items.last(); }
+  [[nodiscard]] const QList<ItemType*>& toList() const { return m_items; }
 
  public:  // QML slots implementation
   void append(QObject* item) override { append(qobject_cast<ItemType*>(item)); }
   void prepend(QObject* item) override { prepend(qobject_cast<ItemType*>(item)); }
   void insert(int idx, QObject* item) override { insert(idx, qobject_cast<ItemType*>(item)); }
   void remove(QObject* item) override { remove(qobject_cast<ItemType*>(item)); }
-  bool contains(QObject* item) const override { return contains(qobject_cast<ItemType*>(item)); }
-  int indexOf(QObject* item) const override { return indexOf(qobject_cast<ItemType*>(item)); }
-  int indexOf(const QString& uid) const { return indexOf(getByID(uid)); }
-  QObject* getAt(int idx) const override { return static_cast<QObject*>(at(idx)); }
-  QObject* getByID(const QString& uid) const override { return static_cast<QObject*>(getByUid(uid)); }
-  QObject* getFirst() const override { return static_cast<QObject*>(first()); }
-  QObject* getLast() const override { return static_cast<QObject*>(last()); }
+  [[nodiscard]] bool contains(QObject* item) const override { return contains(qobject_cast<ItemType*>(item)); }
+  [[nodiscard]] int indexOf(QObject* item) const override { return indexOf(qobject_cast<ItemType*>(item)); }
+  [[nodiscard]] int indexOf(const QString& uid) const { return indexOf(getByID(uid)); }
+  [[nodiscard]] QObject* getAt(int idx) const override { return static_cast<QObject*>(at(idx)); }
+  [[nodiscard]] QObject* getByID(const QString& uid) const override { return static_cast<QObject*>(getByUid(uid)); }
+  [[nodiscard]] QObject* getFirst() const override { return static_cast<QObject*>(first()); }
+  [[nodiscard]] QObject* getLast() const override { return static_cast<QObject*>(last()); }
 
  protected:  // internal stuff
   static const QString& emptyStr() {
@@ -237,7 +236,7 @@ class ObjectListModel : public ObjectListModelBase {
     static const int ret = Qt::UserRole;
     return ret;
   }
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override {
+  [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override {
     return (!parent.isValid() ? m_items.count() : 0);
   }
   void referenceItem(ItemType* item) {
@@ -312,7 +311,7 @@ class ObjectListModel : public ObjectListModelBase {
   }
 
  private:  // data members
-  int m_count;
+  int m_count{0};
   QByteArray m_uidRoleName;
   QByteArray m_dispRoleName;
   QMetaObject m_metaObj;
@@ -323,15 +322,15 @@ class ObjectListModel : public ObjectListModelBase {
   QHash<QString, ItemType*> m_indexByUid;
 };
 
-#define UNIQUE_OBJMODEL_PROPERTY(type, name)                               \
- protected:                                                                \
-  Q_PROPERTY(ObjectListModelBase* name READ get_##name CONSTANT)           \
- private:                                                                  \
-  std::unique_ptr<ObjectListModel<type>> m_##name;                         \
-                                                                           \
- public:                                                                   \
-  ObjectListModel<type>* get_##name(void) const { return m_##name.get(); } \
-                                                                           \
+#define UNIQUE_OBJMODEL_PROPERTY(type, name)                           \
+ protected:                                                            \
+  Q_PROPERTY(ObjectListModelBase* name READ get_##name CONSTANT)       \
+ private:                                                              \
+  std::unique_ptr<ObjectListModel<type>> m_##name;                     \
+                                                                       \
+ public:                                                               \
+  ObjectListModel<type>* get_##name() const { return m_##name.get(); } \
+                                                                       \
  private:
 
 #define UNIQUE_OBJMODEL_PROPERTY_INIT(type, name, idRole)                                            \
@@ -341,6 +340,6 @@ class ObjectListModel : public ObjectListModelBase {
   std::unique_ptr<ObjectListModel<type>> m_##name = std::make_unique<ObjectListModel<type>>(idRole); \
                                                                                                      \
  public:                                                                                             \
-  ObjectListModel<type>* get_##name(void) const { return m_##name.get(); }                           \
+  ObjectListModel<type>* get_##name() const { return m_##name.get(); }                               \
                                                                                                      \
  private:

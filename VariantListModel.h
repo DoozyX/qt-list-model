@@ -11,18 +11,18 @@ class VariantListModel : public QAbstractListModel {
 
  public:
   explicit VariantListModel();
-  ~VariantListModel(void);
+  ~VariantListModel();
 
  public:  // QAbstractItemModel interface reimplemented
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   bool setData(const QModelIndex& index, const QVariant& value, int role);
   QVariant data(const QModelIndex& index, int role) const;
-  QHash<int, QByteArray> roleNames(void) const;
+  QHash<int, QByteArray> roleNames() const;
 
  public slots:  // public API
-  void clear(void);
-  int count(void) const;
-  bool isEmpty(void) const;
+  void clear();
+  int count() const;
+  bool isEmpty() const;
   void append(const QVariant& item);
   void prepend(const QVariant& item);
   void insert(int idx, const QVariant& item);
@@ -33,13 +33,13 @@ class VariantListModel : public QAbstractListModel {
   void move(int idx, int pos);
   void remove(int idx);
   QVariant get(int idx) const;
-  QVariantList list(void) const;
+  QVariantList list() const;
 
  signals:  // notifiers
   void countChanged(int count);
 
  protected:
-  void updateCounter(void);
+  void updateCounter();
 
  private:
   int m_count;
