@@ -15,17 +15,18 @@
 #include <QVariant>
 #include <QVector>
 #include <memory>
+#include <utility>
 
-#include "./ObjectListModelBase.h"
+#include "ObjectListModelBase.h"
 
 template <class ItemType>
 class ObjectListModel : public ObjectListModelBase {
  public:
-  explicit ObjectListModel(const QByteArray& uidRole = QByteArray(), const QByteArray& displayRole = QByteArray())
+  explicit ObjectListModel(QByteArray uidRole = QByteArray(), QByteArray displayRole = QByteArray())
       : ObjectListModelBase(),
         m_count(0),
-        m_uidRoleName(uidRole),
-        m_dispRoleName(displayRole),
+        m_uidRoleName(std::move(uidRole)),
+        m_dispRoleName(std::move(displayRole)),
         m_metaObj(ItemType::staticMetaObject) {
     static QSet<QByteArray> roleNamesBlacklist;
     if (roleNamesBlacklist.isEmpty()) {
@@ -34,7 +35,7 @@ class ObjectListModel : public ObjectListModelBase {
     }
     static const char* HANDLER = "onItemPropertyChanged()";
     m_handler = metaObject()->method(metaObject()->indexOfMethod(HANDLER));
-    if (!displayRole.isEmpty()) {
+    if (!m_dispRoleName.isEmpty()) {
       m_roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
     }
     m_roles.insert(baseRole(), QByteArrayLiteral("qtObject"));
@@ -71,12 +72,12 @@ class ObjectListModel : public ObjectListModelBase {
     }
     return ret;
   }
-  QHash<int, QByteArray> roleNames(void) const override { return m_roles; }
+  QHash<int, QByteArray> roleNames() const override { return m_roles; }
   using const_iterator = typename QList<ItemType*>::const_iterator;
-  const_iterator begin(void) const { return m_items.begin(); }
-  const_iterator end(void) const { return m_items.end(); }
-  const_iterator constBegin(void) const { return m_items.constBegin(); }
-  const_iterator constEnd(void) const { return m_items.constEnd(); }
+  const_iterator begin() const { return m_items.begin(); }
+  const_iterator end() const { return m_items.end(); }
+  const_iterator constBegin() const { return m_items.constBegin(); }
+  const_iterator constEnd() const { return m_items.constEnd(); }
 
  public:  // C++ API
   ItemType* at(int idx) const {
@@ -90,12 +91,12 @@ class ObjectListModel : public ObjectListModelBase {
     return (!m_indexByUid.isEmpty() ? m_indexByUid.value(uid, Q_NULLPTR) : Q_NULLPTR);
   }
   int roleForName(const QByteArray& name) const override { return m_roles.key(name, -1); }
-  int count(void) const override { return m_count; }
-  int size(void) const override { return m_count; }
-  bool isEmpty(void) const override { return m_items.isEmpty(); }
+  int count() const override { return m_count; }
+  int size() const override { return m_count; }
+  bool isEmpty() const override { return m_items.isEmpty(); }
   bool contains(ItemType* item) const { return m_items.contains(item); }
   int indexOf(ItemType* item) const { return m_items.indexOf(item); }
-  void clear(void) override {
+  void clear() override {
     if (!m_items.isEmpty()) {
       beginRemoveRows(noParent(), 0, m_items.count() - 1);
       for (auto item : m_items) {
@@ -202,9 +203,9 @@ class ObjectListModel : public ObjectListModelBase {
       endRemoveRows();
     }
   }
-  ItemType* first(void) const { return m_items.first(); }
-  ItemType* last(void) const { return m_items.last(); }
-  const QList<ItemType*>& toList(void) const { return m_items; }
+  ItemType* first() const { return m_items.first(); }
+  ItemType* last() const { return m_items.last(); }
+  const QList<ItemType*>& toList() const { return m_items; }
 
  public:  // QML slots implementation
   void append(QObject* item) override { append(qobject_cast<ItemType*>(item)); }
@@ -216,23 +217,23 @@ class ObjectListModel : public ObjectListModelBase {
   int indexOf(const QString& uid) const { return indexOf(getByID(uid)); }
   QObject* getAt(int idx) const override { return static_cast<QObject*>(at(idx)); }
   QObject* getByID(const QString& uid) const override { return static_cast<QObject*>(getByUid(uid)); }
-  QObject* getFirst(void) const override { return static_cast<QObject*>(first()); }
-  QObject* getLast(void) const override { return static_cast<QObject*>(last()); }
+  QObject* getFirst() const override { return static_cast<QObject*>(first()); }
+  QObject* getLast() const override { return static_cast<QObject*>(last()); }
 
  protected:  // internal stuff
-  static const QString& emptyStr(void) {
-    static const auto ret = QStringLiteral("");
+  static const QString& emptyStr() {
+    static const auto ret = QString();
     return ret;
   }
-  static const QByteArray& emptyBA(void) {
+  static const QByteArray& emptyBA() {
     static const auto ret = QByteArrayLiteral("");
     return ret;
   }
-  static const QModelIndex& noParent(void) {
+  static const QModelIndex& noParent() {
     static const auto ret = QModelIndex();
     return ret;
   }
-  static const int& baseRole(void) {
+  static const int& baseRole() {
     static const int ret = Qt::UserRole;
     return ret;
   }
@@ -275,7 +276,7 @@ class ObjectListModel : public ObjectListModelBase {
       }
     }
   }
-  void onItemPropertyChanged(void) override {
+  void onItemPropertyChanged() override {
     auto item = qobject_cast<ItemType*>(sender());
     const auto row = m_items.indexOf(item);
     const auto sig = senderSignalIndex();
@@ -303,7 +304,7 @@ class ObjectListModel : public ObjectListModelBase {
       }
     }
   }
-  inline void updateCounter(void) {
+  inline void updateCounter() {
     if (m_count != m_items.count()) {
       m_count = m_items.count();
       Q_EMIT countChanged();
